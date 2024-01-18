@@ -1,4 +1,19 @@
 'use strict';
+const weekDays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+const openingHours = {
+  [weekDays[3]]: {
+    open: 12,
+    close: 22,
+  },
+  [weekDays[4]]: {
+    open: 11,
+    close: 23,
+  },
+  [weekDays[5]]: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+};
 
 // Data needed for a later exercise
 const flights =
@@ -15,21 +30,7 @@ const restaurant = {
   order: function (main, second) {
     return [this.starterMenu[main], this.mainMenu[second]];
   },
-
-  openingHours: {
-    thu: {
-      open: 12,
-      close: 22,
-    },
-    fri: {
-      open: 11,
-      close: 23,
-    },
-    sat: {
-      open: 0, // Open 24 hours
-      close: 24,
-    },
-  },
+  openingHours,
 
   orderRecived: function ({ name1, location, main, second }) {
     console.log(
@@ -43,8 +44,24 @@ const restaurant = {
   },
 };
 
-//
+// looping over objects
+//object properties
+const properties = Object.keys(openingHours);
+console.log(properties);
 
+//object values
+const values = Object.values(openingHours);
+console.log(values);
+
+//enteris
+const entries = Object.entries(openingHours);
+console.log(entries);
+
+for (const [day, { open, close }] of entries) {
+  console.log(` ${day} We opens at ${open} and close at ${close}`);
+}
+
+//
 restaurant.orderRecived({
   name1: 'Ankit',
   location: 'oposite of pvr, 102 ls.',
@@ -54,8 +71,8 @@ restaurant.orderRecived({
 
 //Object destructuring..
 
-const { name, categories, openingHours } = restaurant;
-console.log(name, categories, openingHours);
+const { name, categories, openingHour } = restaurant;
+console.log(name, categories, openingHour);
 
 const { name: resturent, categories: food, openingHours: hours } = restaurant;
 console.log(resturent, food, hours);
@@ -155,3 +172,33 @@ console.log(guest1);
 // nullish coalecing are only null and undefined its does not include o and '';
 const guest = restaurant.guestList ?? 10;
 console.log(guest);
+
+// for of loop
+
+for (const [indx, items] of menu.entries()) {
+  console.log(`${indx + 1} : ${items}`);
+}
+
+//Opetional chaining...
+
+//without opetional chaining
+if (restaurant.openingHours && restaurant.openingHours.fri) {
+  console.log(openingHours.fri.open);
+}
+
+// With opetional chaining
+console.log(restaurant.openingHours?.sat?.open);
+console.log(restaurant.openingHours.mon?.open); // if mon does not exist its logs undefined
+
+//
+
+const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+for (const day of days) {
+  const open = restaurant.openingHours[day]?.open ?? 'closed';
+  console.log(`${day}: We are open at ${open}`);
+}
+
+// optional chaining with methods
+console.log(restaurant.order?.(0, 1) ?? 'Method does not exist');
+console.log(restaurant.orderPasts?.(0, 1) ?? 'Method does not exist');
